@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "T": {
+      "item": "minecraft:enchanting_table"
+    }
+  },
+  "pattern": [
+    " B ",
+    "DTD",
+    "OOO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "chiseled-enchanting:chiseled_enchanting_table"
+  }
+}

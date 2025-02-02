@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/enchanting_table",
+  "textures": {
+    "particle": "chiseled-enchanting:block/chiseled_enchanting_table_bottom",
+    "bottom": "chiseled-enchanting:block/chiseled_enchanting_table_bottom",
+    "top": "chiseled-enchanting:block/chiseled_enchanting_table_top",
+    "side": "chiseled-enchanting:block/chiseled_enchanting_table_side"
+  }
+}

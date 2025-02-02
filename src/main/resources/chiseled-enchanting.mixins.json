@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "ninja.trek.chiseledenchanting.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"EnchantmentScreenHandlerMixin",
+		"EnchantmentScreenHandlerAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

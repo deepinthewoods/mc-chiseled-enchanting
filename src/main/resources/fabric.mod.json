@@ -1,0 +1,55 @@
+{
+	"schemaVersion": 1,
+	"id": "chiseled-enchanting",
+	"version": "${version}",
+	"name": "Chiseled Enchanting",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/chiseled-enchanting/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"ninja.trek.chiseledenchanting.ChiseledEnchanting"
+		],
+		"client": [
+			"ninja.trek.chiseledenchanting.ChiseledEnchantingClient"
+		],
+		"fabric-datagen": [
+			"ninja.trek.chiseledenchanting.ChiseledEnchantingDataGenerator"
+		],
+		"modmenu": [
+			"ninja.trek.chiseledenchanting.ChiseledEnchantingModMenu"
+		]
+	},
+	"mixins": [
+		"chiseled-enchanting.mixins.json",
+		{
+			"config": "chiseled-enchanting.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*",
+		"cloth-config": ">=11.0.0",
+		"modmenu": ">=7.0.0"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"api": "ninja.trek.chiseledenchanting.ChiseledEnchantingModMenu"
+		}
+	}
+
+}
