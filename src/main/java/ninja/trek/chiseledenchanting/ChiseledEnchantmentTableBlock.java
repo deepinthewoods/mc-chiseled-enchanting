@@ -23,9 +23,9 @@ import net.minecraft.block.AbstractBlock;
 
 public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
-    private static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
-    private static final VoxelShape FLOATING_BOOK_SHAPE = Block.createCuboidShape(4.0, 12.0, 4.0, 12.0, 14.0, 12.0);
-    private static final VoxelShape SHAPE = VoxelShapes.union(BASE_SHAPE, FLOATING_BOOK_SHAPE);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+//    private static final VoxelShape FLOATING_BOOK_SHAPE = Block.createCuboidShape(4.0, 12.0, 4.0, 12.0, 14.0, 12.0);
+//    private static final VoxelShape SHAPE = VoxelShapes.union(BASE_SHAPE, FLOATING_BOOK_SHAPE);
 
     public ChiseledEnchantmentTableBlock(Settings settings) {
         super(settings);
@@ -48,6 +48,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
         return world.isClient ? checkType(world, type, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY,
                 ChiseledEnchantmentTableBlockEntity::tick) : null;
     }
+
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
@@ -78,6 +79,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
         }
         return ActionResult.PASS;
     }
+
 
 
 
