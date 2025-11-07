@@ -81,23 +81,28 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
         NbtList boostList = new NbtList();
         for (Map.Entry<Enchantment, Integer> entry : enchantmentBoosts.entrySet()) {
             NbtCompound enchantNbt = new NbtCompound();
-            enchantNbt.putString("id", RegistryKeys.ENCHANTMENT.getValue().toString());
-            enchantNbt.putInt("boost", entry.getValue());
-            boostList.add(enchantNbt);
+            Registry<Enchantment> registry = registryLookup.getOrThrow(RegistryKeys.ENCHANTMENT);
+            registry.getKey(entry.getKey()).ifPresent(key -> {
+                enchantNbt.putString("id", key.getValue().toString());
+                enchantNbt.putInt("boost", entry.getValue());
+                boostList.add(enchantNbt);
+            });
         }
         nbt.put("EnchantmentBoosts", boostList);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
         enchantmentBoosts.clear();
         NbtList boostList = nbt.getList("EnchantmentBoosts", 10);
+        Registry<Enchantment> registry = registryLookup.getOrThrow(RegistryKeys.ENCHANTMENT);
         for (int i = 0; i < boostList.size(); i++) {
             NbtCompound enchantNbt = boostList.getCompound(i);
             try {
                 Identifier id = Identifier.of(enchantNbt.getString("id"));
-                Enchantment enchantment = registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(RegistryKey.of(RegistryKeys.ENCHANTMENT, id)).value();
+                RegistryKey<Enchantment> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, id);
+                Enchantment enchantment = registry.get(key);
                 if (enchantment != null) {
                     enchantmentBoosts.put(enchantment, enchantNbt.getInt("boost"));
                 }

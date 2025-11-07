@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.data.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.util.Identifier;
@@ -26,8 +26,8 @@ public class ChiseledEnchantingDataGenerator implements DataGeneratorEntrypoint 
                         .input('D', Items.DIAMOND)
                         .input('T', Items.ENCHANTING_TABLE)
                         .input('O', Items.OBSIDIAN)
-                        .criterion(FabricRecipeProvider.hasItem(Items.ENCHANTING_TABLE),
-                                FabricRecipeProvider.conditionsFromItem(Items.ENCHANTING_TABLE))
+                        .criterion(hasItem(Items.ENCHANTING_TABLE),
+                                conditionsFromItem(Items.ENCHANTING_TABLE))
                         .offerTo(exporter, Identifier.of(ChiseledEnchanting.MOD_ID, "chiseled_enchanting_table"));
             }
         });
