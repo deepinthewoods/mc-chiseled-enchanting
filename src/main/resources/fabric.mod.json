@@ -36,12 +36,12 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21",
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.10",
 		"java": ">=21",
 		"fabric-api": "*",
-		"cloth-config": ">=11.0.0",
-		"modmenu": ">=7.0.0"
+		"cloth-config": ">=20.0.0",
+		"modmenu": ">=16.0.0-rc.1"
 	},
 	"suggests": {
 		"another-mod": "*"

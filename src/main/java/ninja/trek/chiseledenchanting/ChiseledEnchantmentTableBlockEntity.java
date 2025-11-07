@@ -76,14 +76,17 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
 
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         NbtList boostList = new NbtList();
+        Registry<Enchantment> registry = registryLookup.getOrThrow(RegistryKeys.ENCHANTMENT);
         for (Map.Entry<Enchantment, Integer> entry : enchantmentBoosts.entrySet()) {
-            NbtCompound enchantNbt = new NbtCompound();
-            enchantNbt.putString("id", RegistryKeys.ENCHANTMENT.getValue().toString());
-            enchantNbt.putInt("boost", entry.getValue());
-            boostList.add(enchantNbt);
+            registry.getKey(entry.getKey()).ifPresent(key -> {
+                NbtCompound enchantNbt = new NbtCompound();
+                enchantNbt.putString("id", key.getValue().toString());
+                enchantNbt.putInt("boost", entry.getValue());
+                boostList.add(enchantNbt);
+            });
         }
         nbt.put("EnchantmentBoosts", boostList);
     }
@@ -93,11 +96,13 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
         super.readNbt(nbt, registryLookup);
         enchantmentBoosts.clear();
         NbtList boostList = nbt.getList("EnchantmentBoosts", 10);
+        Registry<Enchantment> registry = registryLookup.getOrThrow(RegistryKeys.ENCHANTMENT);
         for (int i = 0; i < boostList.size(); i++) {
             NbtCompound enchantNbt = boostList.getCompound(i);
             try {
                 Identifier id = Identifier.of(enchantNbt.getString("id"));
-                Enchantment enchantment = registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(RegistryKey.of(RegistryKeys.ENCHANTMENT, id)).value();
+                RegistryKey<Enchantment> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, id);
+                Enchantment enchantment = registry.get(key);
                 if (enchantment != null) {
                     enchantmentBoosts.put(enchantment, enchantNbt.getInt("boost"));
                 }

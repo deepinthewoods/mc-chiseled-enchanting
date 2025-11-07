@@ -3,8 +3,8 @@ package ninja.trek.chiseledenchanting;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
@@ -21,7 +21,7 @@ public class ChiseledEnchanting implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final Block CHISELED_ENCHANTING_TABLE = new ChiseledEnchantmentTableBlock(
-			FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE)
+			AbstractBlock.Settings.copy(Blocks.ENCHANTING_TABLE)
 	);
 
 	public static final BlockEntityType<ChiseledEnchantmentTableBlockEntity> CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY =
