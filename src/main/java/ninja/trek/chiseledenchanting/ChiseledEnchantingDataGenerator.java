@@ -17,7 +17,7 @@ public class ChiseledEnchantingDataGenerator implements DataGeneratorEntrypoint 
 
         pack.addProvider((output, registriesFuture) -> new FabricRecipeProvider(output, registriesFuture) {
             @Override
-            public void generate(RecipeExporter exporter) {
+            public void generateRecipes(RecipeExporter exporter) {
                 ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE)
                         .pattern(" B ")
                         .pattern("DTD")

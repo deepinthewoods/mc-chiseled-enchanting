@@ -45,7 +45,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient ? checkType(world, type, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY,
+        return world.isClient() ? checkType(world, type, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY,
                 ChiseledEnchantmentTableBlockEntity::tick) : null;
     }
 
@@ -68,7 +68,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
         BlockEntity blockEntity = world.getBlockEntity(pos);
