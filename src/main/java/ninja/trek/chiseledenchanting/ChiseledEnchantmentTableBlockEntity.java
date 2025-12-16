@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -14,12 +15,14 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.text.Text.Serialization;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,6 +100,8 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
 
     private void updateEnchantmentBoosts(World world, BlockPos pos) {
         enchantmentBoosts.clear();
+
+        // Scan for chiseled bookshelves (2 blocks away in XZ)
         for (BlockPos scanPos : BlockPos.iterate(pos.add(-2, 0, -2), pos.add(2, 3, 2))) {
             BlockState scanState = world.getBlockState(scanPos);
             if (scanState.getBlock() instanceof net.minecraft.block.ChiseledBookshelfBlock) {
@@ -105,6 +110,19 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
                     processBookshelfInventory(inventory);
                 }
             }
+        }
+
+        // Scan for armor stands (3 blocks away in XZ)
+        Box armorStandBox = new Box(
+            pos.getX() - 3, pos.getY(), pos.getZ() - 3,
+            pos.getX() + 4, pos.getY() + 4, pos.getZ() + 4
+        );
+        List<ArmorStandEntity> armorStands = world.getEntitiesByClass(
+            ArmorStandEntity.class, armorStandBox, entity -> true
+        );
+
+        for (ArmorStandEntity armorStand : armorStands) {
+            processArmorStandEquipment(armorStand);
         }
     }
 
@@ -117,6 +135,31 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
                     int currentBoost = enchantmentBoosts.getOrDefault(enchantment, 0);
                     enchantmentBoosts.put(enchantment.value(), Math.min(3, currentBoost + 1)); // Max boost of 3 books
                 }
+            }
+        }
+    }
+
+    private void processArmorStandEquipment(ArmorStandEntity armorStand) {
+        // Check all equipment slots: helmet, chestplate, leggings, boots, mainhand, offhand
+        for (ItemStack stack : armorStand.getArmorItems()) {
+            processEquipmentItem(stack);
+        }
+        for (ItemStack stack : armorStand.getHandItems()) {
+            processEquipmentItem(stack);
+        }
+    }
+
+    private void processEquipmentItem(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        // Get enchantments from the item
+        ItemEnchantmentsComponent enchantments = stack.get(DataComponentTypes.ENCHANTMENTS);
+        if (enchantments != null && !enchantments.isEmpty()) {
+            for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
+                int currentBoost = enchantmentBoosts.getOrDefault(enchantment.value(), 0);
+                enchantmentBoosts.put(enchantment.value(), Math.min(3, currentBoost + 1)); // Max boost of 3 total
             }
         }
     }
