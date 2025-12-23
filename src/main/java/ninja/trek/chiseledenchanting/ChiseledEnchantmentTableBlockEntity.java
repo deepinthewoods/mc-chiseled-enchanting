@@ -13,7 +13,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
-import net.minecraft.text.Text.Serialization;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -141,10 +140,8 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
 
     private void processArmorStandEquipment(ArmorStandEntity armorStand) {
         // Check all equipment slots: helmet, chestplate, leggings, boots, mainhand, offhand
-        for (ItemStack stack : armorStand.getArmorItems()) {
-            processEquipmentItem(stack);
-        }
-        for (ItemStack stack : armorStand.getHandItems()) {
+        for (net.minecraft.entity.EquipmentSlot slot : net.minecraft.entity.EquipmentSlot.values()) {
+            ItemStack stack = armorStand.getEquippedStack(slot);
             processEquipmentItem(stack);
         }
     }
@@ -175,19 +172,17 @@ public class ChiseledEnchantmentTableBlockEntity extends BlockEntity {
 
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void addComponents(net.minecraft.component.ComponentMap.Builder components) {
+        super.addComponents(components);
         if (this.customName != null) {
-            nbt.putString("CustomName", Text.Serialization.toJsonString(this.customName, registryLookup));
+            components.add(net.minecraft.component.DataComponentTypes.CUSTOM_NAME, this.customName);
         }
     }
 
     @Override
-    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
-        if (nbt.contains("CustomName", 8)) {
-            this.customName = Text.Serialization.fromJson(nbt.getString("CustomName"), registryLookup);
-        }
+    public void setComponents(net.minecraft.component.ComponentMap components) {
+        super.setComponents(components);
+        this.customName = components.get(net.minecraft.component.DataComponentTypes.CUSTOM_NAME);
     }
 
     @Nullable

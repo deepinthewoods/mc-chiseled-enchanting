@@ -38,7 +38,7 @@ public class EnchantmentScreenHandlerMixin {
                 boolean invertItems = ChiseledEnchantingConfig.get().inverseWeightingForItems; // Global inversion setting
 
                 for (EnchantmentLevelEntry entry : entries) {
-                    float boost = blockEntity.getEnchantmentBoost(entry.enchantment.value());
+                    float boost = blockEntity.getEnchantmentBoost(entry.enchantment().value());
 
                     // Apply book-specific inversion
                     if (isBook && ChiseledEnchantingConfig.get().inverseWeightingForBooks) {

@@ -1,7 +1,5 @@
 package ninja.trek.chiseledenchanting;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -23,6 +21,8 @@ import net.minecraft.block.AbstractBlock;
 
 public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
+    public static final MapCodec<ChiseledEnchantmentTableBlock> CODEC = createCodec(ChiseledEnchantmentTableBlock::new);
+
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
 //    private static final VoxelShape FLOATING_BOOK_SHAPE = Block.createCuboidShape(4.0, 12.0, 4.0, 12.0, 14.0, 12.0);
 //    private static final VoxelShape SHAPE = VoxelShapes.union(BASE_SHAPE, FLOATING_BOOK_SHAPE);
@@ -33,7 +33,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
     @Override
     protected MapCodec<ChiseledEnchantmentTableBlock> getCodec() {
-        return MapCodec.of(Encoder.empty(), Decoder.unit(this));
+        return CODEC;
     }
 
     @Nullable
@@ -45,7 +45,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient ? checkType(world, type, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY,
+        return world.isClient() ? checkType(world, type, ChiseledEnchanting.CHISELED_ENCHANTING_TABLE_BLOCK_ENTITY,
                 ChiseledEnchantmentTableBlockEntity::tick) : null;
     }
 
@@ -69,7 +69,7 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (world.isClient) {
+        if (world.isClient()) {
             return ActionResult.SUCCESS;
         }
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -94,13 +94,11 @@ public class ChiseledEnchantmentTableBlock extends BlockWithEntity {
 
 
     @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof ChiseledEnchantmentTableBlockEntity) {
-                // Handle any cleanup if needed
-            }
-            super.onStateReplaced(state, world, pos, newState, moved);
+    protected void onStateReplaced(BlockState state, net.minecraft.server.world.ServerWorld world, BlockPos pos, boolean moved) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof ChiseledEnchantmentTableBlockEntity) {
+            // Handle any cleanup if needed
         }
+        super.onStateReplaced(state, world, pos, moved);
     }
 }
